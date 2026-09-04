@@ -1,10 +1,10 @@
 import {test, expect} from '@playwright/test';
+import { LoginPage } from '../pages/LoginPage';
 
 test ('Successful login', async ( {page} ) => {
+    const loginPage = new LoginPage(page);
     await page.goto('/');
-    await page.locator('#user-name').fill('standard_user');
-    await page.locator('#password').fill('secret_sauce');
-    await page.locator('#login-button').click();
+    await loginPage.login('standard_user', 'secret_sauce');
     await expect(page).toHaveURL('https://www.saucedemo.com/inventory.html');
     await expect(page.locator('.title')).toHaveText('Products');
 })
