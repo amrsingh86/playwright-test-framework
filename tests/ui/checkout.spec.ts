@@ -1,10 +1,13 @@
-import { test } from "@playwright/test";
-import { LoginPage } from "../../pages/LoginPage";
+import { test } from '../../fixtures/testFixture';
+import path from 'path';
+import { JsonReader } from '../../utils/JsonReader';
 
-test('Verify checkout page after proceeding from cart', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    await page.goto('/');
-    const inventoryPage = await loginPage.login('standard_user', 'secret_sauce');
+const testData = JsonReader.read(
+    path.join(__dirname, '../../test-data/users.json')
+);
+
+test('Verify checkout page after proceeding from cart', async ({ inventoryPage }) => {
+    await inventoryPage.verifyInventoryPage();
     await inventoryPage.addBackPackToCart();
     await inventoryPage.verifyCartItemCount(1);
 
@@ -14,7 +17,11 @@ test('Verify checkout page after proceeding from cart', async ({ page }) => {
 
     const checkoutPage = await cartPage.proceedToCheckout();
     await checkoutPage.verifyCheckoutPage();
-    await checkoutPage.fillCheckoutInformation('John', 'Doe', '12345');
+    await checkoutPage.fillCheckoutInformation(    
+        testData.checkoutUser.firstName,
+        testData.checkoutUser.lastName,
+        testData.checkoutUser.postalCode
+    );
     await checkoutPage.continueToOverview();
     await checkoutPage.finishOrder();
     await checkoutPage.verifyOrderConfirmation();

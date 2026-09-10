@@ -1,14 +1,11 @@
-import { test } from "@playwright/test";
-import { LoginPage } from "../../pages/LoginPage";
+import { test } from '../../fixtures/testFixture';
 
-test('Verify cart page after adding an item to the cart', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    await page.goto('/');
-    const inventoryPage = await loginPage.login('standard_user', 'secret_sauce');
+test('Verify cart page after adding an item to the cart', async ({ inventoryPage }) => {
+    await inventoryPage.verifyInventoryPage();
     await inventoryPage.addBackPackToCart();
+    await inventoryPage.verifyCartItemCount(1);
 
     const cartPage = await inventoryPage.goToCart();
-
     await cartPage.verifyCartPage();
     await cartPage.verifyBackpackInCart();
 });
