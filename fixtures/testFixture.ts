@@ -3,13 +3,14 @@ import { LoginPage } from '../pages/LoginPage';
 import { InventoryPage } from '../pages/InventoryPage';
 import path from 'path';
 import { JsonReader } from '../utils/JsonReader';
+import { TestData } from '../test-data/TestData';
 
 type TestFixtures = {
     loginPage: LoginPage;
     inventoryPage: InventoryPage;
 };
 
-const testData = JsonReader.read(
+const testData = JsonReader.read<TestData>(
     path.join(__dirname, '../test-data/users.json')
 );
 

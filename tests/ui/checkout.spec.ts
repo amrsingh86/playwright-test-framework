@@ -1,8 +1,9 @@
 import { test } from '../../fixtures/testFixture';
 import path from 'path';
 import { JsonReader } from '../../utils/JsonReader';
+import { TestData } from '../../test-data/TestData';
 
-const testData = JsonReader.read(
+const testData = JsonReader.read<TestData>(
     path.join(__dirname, '../../test-data/users.json')
 );
 
