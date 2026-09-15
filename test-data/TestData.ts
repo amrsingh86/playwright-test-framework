@@ -10,3 +10,17 @@ export interface TestData {
         postalCode: string;
     };
 }
+
+export interface BookingDates {
+    checkin: string;
+    checkout: string;
+}
+
+export interface CreateBookingRequest {
+    firstname: string;
+    lastname: string;
+    totalprice: number;
+    depositpaid: boolean;
+    bookingdates: BookingDates;
+    additionalneeds: string;
+}
