@@ -132,3 +132,88 @@ test('Delete existing booking', async ({ request }) => {
     const getDeletedBookingResponse = await bookingAPI.getBookingById(bookingId);
     expect(getDeletedBookingResponse.status()).toBe(404);
 });
+
+test('Return 404 for non-existent booking', async ({ request }) => {
+    const bookingAPI = new BookingAPI(request);
+    const response = await bookingAPI.getBookingById(99999); // Assuming 99999 is a non-existent booking ID
+    expect(response.status()).toBe(404);
+});
+
+test('Return 403 for unauthorized update attempt', async ({ request }) => {
+    const bookingAPI = new BookingAPI(request);
+
+    //Create booking 
+    const bookingData: CreateBookingRequest = {
+        firstname: 'Jack',
+        lastname: 'Doe',
+        totalprice: 200,
+        depositpaid: false,
+        bookingdates: {
+            checkin: '2026-10-01',
+            checkout: '2026-10-05'
+        },
+        additionalneeds: 'Breakfast'
+    };
+
+    const createResponse = await bookingAPI.createBooking(bookingData);
+    expect(createResponse.status()).toBe(200);
+    const createResponseBody = await createResponse.json();
+    const bookingId = createResponseBody.bookingid;
+
+    // Attempt to update the booking without authentication
+    const updatedBookingData: CreateBookingRequest = {
+        ...bookingData,
+        firstname: 'Jackson',
+        totalprice: 250,
+        depositpaid: true
+    };
+
+    const updateResponse = await bookingAPI.updateBooking(bookingId, updatedBookingData, '');
+    expect(updateResponse.status()).toBe(403);
+});
+
+test('Return 403 for unauthorized delete attempt', async ({ request }) => {
+    const bookingAPI = new BookingAPI(request);
+
+    //Create booking 
+    const bookingData: CreateBookingRequest = {
+        firstname: 'Jack',
+        lastname: 'Doe',
+        totalprice: 200,
+        depositpaid: false,
+        bookingdates: {
+            checkin: '2026-10-01',
+            checkout: '2026-10-05'
+        },
+        additionalneeds: 'Breakfast'
+    };
+
+    const createResponse = await bookingAPI.createBooking(bookingData);
+    expect(createResponse.status()).toBe(200);
+    const createResponseBody = await createResponse.json();
+    const bookingId = createResponseBody.bookingid;
+
+    // Attempt to delete the booking without authentication
+    const deleteResponse = await bookingAPI.deleteBooking(bookingId, '');
+    expect(deleteResponse.status()).toBe(403);
+});
+
+test('Reject booking creation with invalid data', async ({ request }) => {
+    const bookingAPI = new BookingAPI(request);
+
+    // Invalid booking data (missing required fields)
+    const invalidBookingData = {
+        firstname: 'Jack',
+        // lastname is missing
+        totalprice: 200,
+        depositpaid: false,
+        bookingdates: {
+            checkin: '2026-10-01',
+            checkout: '2026-10-05'
+        },
+        additionalneeds: 'Breakfast'
+    };
+
+    const createResponse = await bookingAPI.createBooking(invalidBookingData as CreateBookingRequest);
+    expect(createResponse.status()).toBe(500);
+});
