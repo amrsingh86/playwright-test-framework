@@ -1,4 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
+import { runtimeConfig } from './config/runtimeConfig';
+
 
 export default defineConfig({
     testDir: './tests',
@@ -6,7 +8,7 @@ export default defineConfig({
     fullyParallel: true,
 
     use: {
-        baseURL: 'https://www.saucedemo.com',
+        baseURL: runtimeConfig.uiBaseURL,
         trace: 'on-first-retry',
         screenshot: 'only-on-failure',
         video: 'retain-on-failure'

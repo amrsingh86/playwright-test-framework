@@ -1,9 +1,13 @@
 import { APIRequestContext } from "@playwright/test";
 import { CreateBookingRequest } from "../test-data/TestData";
+import { runtimeConfig } from "../config/runtimeConfig";
 
 export class BookingAPI {
-    private readonly baseURL = 'https://restful-booker.herokuapp.com';
-    constructor (private readonly request: APIRequestContext) {} 
+    
+    constructor(
+        private readonly request: APIRequestContext,
+        private readonly baseURL: string
+    ) {}
 
     async getBookings() {
         return await this.request.get(`${this.baseURL}/booking`);

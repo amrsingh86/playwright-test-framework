@@ -1,17 +1,14 @@
-import {test, expect} from '@playwright/test';
-import { BookingAPI } from '../../api/BookingAPI';
+import {test, expect} from '../../fixtures/apiFixture';
 import { CreateBookingRequest } from '../../test-data/TestData';
 
-test('Get all bookings', async ({ request }) => {
-    const bookingAPI = new BookingAPI(request);
+test('Get all bookings', async ({ bookingAPI }) => {
     const response = await bookingAPI.getBookings();
     expect(response.status()).toBe(200);
     const responseBody = await response.json();
     expect(responseBody.length).toBeGreaterThan(0);
 });
 
-test('Get booking by ID', async ({ request }) => {
-    const bookingAPI = new BookingAPI(request);
+test('Get booking by ID', async ({ bookingAPI }) => {
     const response = await bookingAPI.getBookingById(5);
     expect(response.status()).toBe(200);
 
@@ -23,8 +20,8 @@ test('Get booking by ID', async ({ request }) => {
     expect(responseBody).toHaveProperty('bookingdates');
 });
 
-test('Create and retrieve new booking', async ({ request }) => {
-    const bookingAPI = new BookingAPI(request);
+test('Create and retrieve new booking', async ({ bookingAPI }) => {
+    
     const bookingData: CreateBookingRequest = {
         firstname: 'Jack',
         lastname: 'Doey',
@@ -55,9 +52,7 @@ test('Create and retrieve new booking', async ({ request }) => {
     expect(getResponseBody.depositpaid).toBe(bookingData.depositpaid);
 });
 
-test('Update existing booking', async ({ request }) => {
-    const bookingAPI = new BookingAPI(request);
-
+test('Update existing booking', async ({ bookingAPI }) => {
     //Create booking 
     const bookingData: CreateBookingRequest = {
         firstname: 'Jack',
@@ -98,10 +93,8 @@ test('Update existing booking', async ({ request }) => {
     expect(updateResponseBody.depositpaid).toBe(updatedBookingData.depositpaid);
 });
 
-test('Delete existing booking', async ({ request }) => {
-    const bookingAPI = new BookingAPI(request);
-
-    //Create booking 
+test('Delete existing booking', async ({ bookingAPI }) => {
+   //Create booking 
     const bookingData: CreateBookingRequest = {
         firstname: 'Jack',
         lastname: 'Doe',
@@ -133,16 +126,13 @@ test('Delete existing booking', async ({ request }) => {
     expect(getDeletedBookingResponse.status()).toBe(404);
 });
 
-test('Return 404 for non-existent booking', async ({ request }) => {
-    const bookingAPI = new BookingAPI(request);
+test('Return 404 for non-existent booking', async ({ bookingAPI }) => {
     const response = await bookingAPI.getBookingById(99999); // Assuming 99999 is a non-existent booking ID
     expect(response.status()).toBe(404);
 });
 
-test('Return 403 for unauthorized update attempt', async ({ request }) => {
-    const bookingAPI = new BookingAPI(request);
-
-    //Create booking 
+test('Return 403 for unauthorized update attempt', async ({ bookingAPI }) => {
+  //Create booking 
     const bookingData: CreateBookingRequest = {
         firstname: 'Jack',
         lastname: 'Doe',
@@ -172,9 +162,7 @@ test('Return 403 for unauthorized update attempt', async ({ request }) => {
     expect(updateResponse.status()).toBe(403);
 });
 
-test('Return 403 for unauthorized delete attempt', async ({ request }) => {
-    const bookingAPI = new BookingAPI(request);
-
+test('Return 403 for unauthorized delete attempt', async ({ bookingAPI }) => {
     //Create booking 
     const bookingData: CreateBookingRequest = {
         firstname: 'Jack',
@@ -198,9 +186,7 @@ test('Return 403 for unauthorized delete attempt', async ({ request }) => {
     expect(deleteResponse.status()).toBe(403);
 });
 
-test('Reject booking creation with invalid data', async ({ request }) => {
-    const bookingAPI = new BookingAPI(request);
-
+test('Reject booking creation with invalid data', async ({ bookingAPI }) => {
     // Invalid booking data (missing required fields)
     const invalidBookingData = {
         firstname: 'Jack',
