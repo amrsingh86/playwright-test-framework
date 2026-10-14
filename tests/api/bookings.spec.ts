@@ -1,5 +1,6 @@
 import {test, expect} from '../../fixtures/apiFixture';
 import { CreateBookingRequest } from '../../test-data/TestData';
+import { RandomData } from '../../utils/RandomData';
 
 test('Get all bookings', async ({ bookingAPI }) => {
     const response = await bookingAPI.getBookings();
@@ -21,18 +22,7 @@ test('Get booking by ID', async ({ bookingAPI }) => {
 });
 
 test('Create and retrieve new booking', async ({ bookingAPI }) => {
-    
-    const bookingData: CreateBookingRequest = {
-        firstname: 'Jack',
-        lastname: 'Doey',
-        totalprice: 150,
-        depositpaid: true,
-        bookingdates: {
-            checkin: '2026-09-20',
-            checkout: '2026-09-25'
-        },
-        additionalneeds: 'Breakfast'
-    };
+    const bookingData = RandomData.bookingData(); 
 
     //Create a new booking
     const createResponse = await bookingAPI.createBooking(bookingData);
