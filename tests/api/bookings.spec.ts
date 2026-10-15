@@ -1,6 +1,7 @@
 import {test, expect} from '../../fixtures/apiFixture';
 import { CreateBookingRequest } from '../../test-data/TestData';
 import { RandomData } from '../../utils/RandomData';
+import { Logger } from '../../utils/Logger';
 
 test('Get all bookings', async ({ bookingAPI }) => {
     const response = await bookingAPI.getBookings();
@@ -25,11 +26,13 @@ test('Create and retrieve new booking', async ({ bookingAPI }) => {
     const bookingData = RandomData.bookingData(); 
 
     //Create a new booking
+    Logger.info('Starting Create Booking test');
     const createResponse = await bookingAPI.createBooking(bookingData);
     expect(createResponse.status()).toBe(200);
     const createResponseBody = await createResponse.json();
     expect(createResponseBody).toHaveProperty('bookingid');
     const bookingId = createResponseBody.bookingid;
+    Logger.info(`Booking created successfully. Booking ID: ${bookingId}`);
 
     //Retrieve the newly created booking by ID
     const getResponse = await bookingAPI.getBookingById(bookingId);
@@ -40,6 +43,7 @@ test('Create and retrieve new booking', async ({ bookingAPI }) => {
     expect(getResponseBody.lastname).toBe(bookingData.lastname);
     expect(getResponseBody.totalprice).toBe(bookingData.totalprice);
     expect(getResponseBody.depositpaid).toBe(bookingData.depositpaid);
+    Logger.info('Booking details verified successfully');
 });
 
 test('Update existing booking', async ({ bookingAPI }) => {
