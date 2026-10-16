@@ -14,5 +14,8 @@
     "@playwright/test": "^1.62.1",
     "@types/node": "^22.20.3",
     "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "xlsx": "^0.18.5"
   }
 }
