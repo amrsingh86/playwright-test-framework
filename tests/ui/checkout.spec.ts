@@ -7,7 +7,8 @@ const testData = JsonReader.read<TestData>(
     path.join(__dirname, '../../test-data/users.json')
 );
 
-test('Verify checkout page after proceeding from cart', async ({ inventoryPage }) => {
+test('Verify checkout page after proceeding from cart', { tag: ['@smoke', '@checkout', '@ui']}, 
+    async ({ inventoryPage }) => {
     await inventoryPage.verifyInventoryPage();
     await inventoryPage.addBackPackToCart();
     await inventoryPage.verifyCartItemCount(1);

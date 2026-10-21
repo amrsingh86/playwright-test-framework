@@ -22,7 +22,8 @@ test('Get booking by ID', async ({ bookingAPI }) => {
     expect(responseBody).toHaveProperty('bookingdates');
 });
 
-test('Create and retrieve new booking', async ({ bookingAPI }) => {
+test('Create and retrieve new booking', { tag: ['@smoke', '@regression', '@api'] }, 
+    async ({ bookingAPI }) => {
     const bookingData = RandomData.bookingData(); 
 
     //Create a new booking
