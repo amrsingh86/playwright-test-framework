@@ -39,7 +39,7 @@ jobs:
 
       # Execute smoke tests in Chromium
       - name: Run smoke tests
-        run: npx playwright test --grep @smoke --project=chromium --workers=2
+        run: npx playwright test --grep @smoke --project=chromium --project=api --workers=2
 
       # Upload HTML report even when tests fail
       - name: Upload Playwright HTML report

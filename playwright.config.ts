@@ -17,16 +17,26 @@ export default defineConfig({
     projects: [
         {
             name: 'chromium',
+            testMatch: '**/tests/ui/**/*.spec.ts',
             use: { ...devices['Desktop Chrome'] }
         },
         {
             name: 'firefox',
+            testMatch: '**/tests/ui/**/*.spec.ts',
             use: { ...devices['Desktop Firefox']
             }
         },
         {
             name: 'webkit',
+            testMatch: '**/tests/ui/**/*.spec.ts',
             use: { ...devices['Desktop Safari']
+            }
+        },
+        {
+            name: 'api',
+            testMatch: '**/tests/api/**/*.spec.ts',
+            use: {
+            baseURL: runtimeConfig.apiBaseURL
             }
         }
     ],
